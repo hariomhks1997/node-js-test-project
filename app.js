@@ -9,6 +9,7 @@ const app=express();
 const sequelize = require('./util/database');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.static("public"))
 app.use(indexRoutes)
 sequelize.sync().then(result => {
 

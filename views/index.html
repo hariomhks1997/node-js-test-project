@@ -23,23 +23,29 @@
         }
         .rating label:before {
             content: '★';
+           
         }
-        .rating input:checked ~ label {
-            color: #f7d005;
+        .rating input:checked ~ label  {
+            color:orangered;
+            
+        }
+        button:active{
+            background-color:teal;
         }
     </style>
 </head>
 <body>
    
-    <header>Add A Review</header><br>
-    <form id="form" onsubmit="a(event)">
+    <header style="text-align: center;background-color: chartreuse;font-size:xx-large;">Add A Review</header><br>
+    <div style="display: flex;justify-content: space-around;margin-top: 1rem;">
+    <form id="form" onsubmit="a(event)" style="background-color: #f7d005;width: fit-content;padding: 1rem;height: fit-content ;" method="POST" action="/add-user">
     <label>Company Name</label><br>
     <input type="text" name="companyname"></input><br>
     <label>Pros</label><br>
     <textarea name="pros"></textarea><br>
     <label>Cons</label><br>
     <textarea name="cons"></textarea><br>
-    <h2>Rating:</h2>
+    <h2 style="background-color: aqua;">Rating:</h2>
     <div class="rating" id="ratn">
         <input type="radio" id="star5" name="rating" value="5">
         <label for="star5"></label>
@@ -52,101 +58,23 @@
         <input type="radio" id="star1" name="rating" value="1">
         <label for="star1"></label>
     </div>
-    <button type="submit">Submit Review</button>
+    <button type="submit" class="active" >Submit Review</button>
 </form>
-<div style="display: flex;justify-content: end;margin-top: 0%;">
+<div style="display: flex;justify-content: end;margin-top: 0%;background-color: aquamarine;width: fit-content;">
 <div >
-<form id="search" onsubmit="b(event)">
-    <input type="text" name="searchname"></input>
-    <button type="submit">Submit</button>
+<form id="search" onsubmit="b(event)" style="width: fit-content;">
+    <input type="text" name="searchname" ></input><br>
+    <button type="submit" style="margin-top: 0.5rem;">Search Company</button>
 </form>
-<ul id="ul">
-    <header style="margin-bottom: 1rem;color:darkblue;font-size:xx-large;">Company Review</header>
+<ul id="ul" >
+    <header style="margin-right:2rem;color:darkblue;font-size:xx-large;text-align: center;">Company Review</header>
 </ul>
 </div>
 </div>
+</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
-<script >
-    const ratingInputs = document.querySelectorAll('.rating input');
-     async function a(event){
-        event.preventDefault()
-        let rate;
-        ratingInputs.forEach(input=>{
-            if(input.checked){
-                rate=input.value
-            }
-        })
-        const pros=event.target.pros.value;
-        const cons=event.target.cons.value;
-        const companyname=event.target.companyname.value;
-        let rating=rate
-       const obj={
-        companyname,
-        pros,
-        cons,
-        rating
-       }
-       try {
-                const post = await axios.post("http://localhost:3000/add-user",obj)
-                console.log(post)
-               // window.location.href="http://localhost:3000/demopage"
-
-               
-
-            } catch (err) {
-                console.log(err)
-            }
-           
+<script src="/Js/index.js">
     
-       }
-       
-       
-       
-    
-    async function b(event){
-        event.preventDefault()
-       const name=event.target.searchname.value;
-        try {
-            const get = await axios.get("http://localhost:3000/add-user")
-            console.log(get)
-            for (var i = 0; i < get.data.length; i++) {
-                showuseronscreen(name,get.data[i])
-            }
-        } catch (err) {
-            console.log(err)
-        }
-      function showuseronscreen(name,obj){
-       
-        if(name==obj.companyname){
-           const ul=document.getElementById("ul")
-           const header=document.createElement("header")
-          
-           header.append(document.createTextNode(`Company Name : ${obj.companyname}`))
-           const header1=document.createElement("header")
-           header1.append(document.createTextNode(`Rating : ${obj.rating}`))
-           const li=document.createElement("li")
-           li.append(document.createTextNode(`Pros : ${obj.pros}`))
-           const li1=document.createElement("li")
-           li1.append(document.createTextNode(`Cons : ${obj.cons}`))
-           //const rating=document.getElementById("ratn")
-           ul.appendChild(header)
-           ul.appendChild(header1)
-           ul.appendChild(li)
-           ul.appendChild(li1)
-           li1.style.marginBottom="1rem"
-           ////ul.appendChild(rating)
-        }
-
-      }
-    }
-    
-    
-    
-   
-   
-           
-       
-      
 </script>
 </body>
 </html>
