@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .rating {
+            unicode-bidi: bidi-override;
+            direction: rtl;
+            text-align: left;
+          
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            display: inline-block;
+            padding: 5px;
+            font-size: 24px;
+            color: #888;
+            cursor: pointer;
+        }
+        .rating label:before {
+            content: '★';
+        }
+        .rating input:checked ~ label {
+            color: #f7d005;
+        }
+    </style>
+</head>
+<body>
+   
+    <header>Add A Review</header><br>
+    <form id="form" onsubmit="a(event)">
+    <label>Company Name</label><br>
+    <input type="text" name="companyname"></input><br>
+    <label>Pros</label><br>
+    <textarea name="pros"></textarea><br>
+    <label>Cons</label><br>
+    <textarea name="cons"></textarea><br>
+    <h2>Rating:</h2>
+    <div class="rating" id="ratn">
+        <input type="radio" id="star5" name="rating" value="5">
+        <label for="star5"></label>
+        <input type="radio" id="star4" name="rating" value="4">
+        <label for="star4"></label>
+        <input type="radio" id="star3" name="rating" value="3">
+        <label for="star3"></label>
+        <input type="radio" id="star2" name="rating" value="2">
+        <label for="star2"></label>
+        <input type="radio" id="star1" name="rating" value="1">
+        <label for="star1"></label>
+    </div>
+    <button type="submit">Submit Review</button>
+</form>
+<div style="display: flex;justify-content: end;margin-top: 0%;">
+<div >
+<form id="search" onsubmit="b(event)">
+    <input type="text" name="searchname"></input>
+    <button type="submit">Submit</button>
+</form>
+<ul id="ul">
+    <header style="margin-bottom: 1rem;color:darkblue;font-size:xx-large;">Company Review</header>
+</ul>
+</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
+<script >
+    const ratingInputs = document.querySelectorAll('.rating input');
+     async function a(event){
+        event.preventDefault()
+        let rate;
+        ratingInputs.forEach(input=>{
+            if(input.checked){
+                rate=input.value
+            }
+        })
+        const pros=event.target.pros.value;
+        const cons=event.target.cons.value;
+        const companyname=event.target.companyname.value;
+        let rating=rate
+       const obj={
+        companyname,
+        pros,
+        cons,
+        rating
+       }
+       try {
+                const post = await axios.post("http://localhost:3000/add-user",obj)
+                console.log(post)
+               // window.location.href="http://localhost:3000/demopage"
+
+               
+
+            } catch (err) {
+                console.log(err)
+            }
+           
+    
+       }
+       
+       
+       
+    
+    async function b(event){
+        event.preventDefault()
+       const name=event.target.searchname.value;
+        try {
+            const get = await axios.get("http://localhost:3000/add-user")
+            console.log(get)
+            for (var i = 0; i < get.data.length; i++) {
+                showuseronscreen(name,get.data[i])
+            }
+        } catch (err) {
+            console.log(err)
+        }
+      function showuseronscreen(name,obj){
+       
+        if(name==obj.companyname){
+           const ul=document.getElementById("ul")
+           const header=document.createElement("header")
+          
+           header.append(document.createTextNode(`Company Name : ${obj.companyname}`))
+           const header1=document.createElement("header")
+           header1.append(document.createTextNode(`Rating : ${obj.rating}`))
+           const li=document.createElement("li")
+           li.append(document.createTextNode(`Pros : ${obj.pros}`))
+           const li1=document.createElement("li")
+           li1.append(document.createTextNode(`Cons : ${obj.cons}`))
+           //const rating=document.getElementById("ratn")
+           ul.appendChild(header)
+           ul.appendChild(header1)
+           ul.appendChild(li)
+           ul.appendChild(li1)
+           li1.style.marginBottom="1rem"
+           ////ul.appendChild(rating)
+        }
+
+      }
+    }
+    
+    
+    
+   
+   
+           
+       
+      
+</script>
+</body>
+</html>
